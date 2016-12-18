@@ -52,11 +52,23 @@ module Codebreaker
       raise 'Secret code should have numbers from 1 to 6' if (guess =~ /[1-6]{4}/).nil? 
     end
 
-    def start
+    def game_process
+      validation(guess)
+      puts "You have #{@game.chances} chance(s): "
+      puts @game.checking_results(guess)
+      win(guess)
+      lose
+    end
+
+    def dialog
       puts "Enter your name:"
       @name = gets.chomp.capitalize
       puts "Enter your answer (4 numbers from 1 to 6)"
       puts "Enter 'H' - for hint,'Q' for exit"
+    end
+
+    def start
+      dialog
       while @game_status do
         guess = gets.chomp.capitalize
         if guess == 'H'
@@ -64,11 +76,7 @@ module Codebreaker
         elsif guess == 'Q'
           exit
         else
-          validation(guess)
-          puts "You have #{@game.chances} chance(s): "
-          puts @game.checking_results(guess)
-          win(guess)
-          lose
+          game_process
           play_again unless @game_status
         end
       end
